@@ -23,23 +23,23 @@ body { height: 100%; margin: 0; padding: 0;}
   
   //add WMS
   var wmsLayer = {
-	rw: L.tileLayer.wms("http://139.162.55.216/geoserver/ows?", {
-    layers: 'geonode:boundary',
+	rw: L.tileLayer.wms('http://localhost:8080/geoserver/ows', {
+    layers: 'postgis:boundary',
 	format: 'image/png',
 	transparent: true
 	}),
-	kel: L.tileLayer.wms("http://139.162.55.216/geoserver/ows?", {
-    layers: 'geonode:boundary_kel',
+	kel: L.tileLayer.wms("http://localhost:8080/geoserver/ows", {
+    layers: 'postgis:boundary_kel',
 	format: 'image/png',
 	transparent: true
 	}),
-	kec: L.tileLayer.wms("http://139.162.55.216/geoserver/ows?", {
-    layers: 'geonode:boundary_kec',
+	kec: L.tileLayer.wms("http://localhost:8080/geoserver/ows", {
+    layers: 'postgis:boundary_kec',
 	format: 'image/png',
 	transparent: true
 	}),
-	kab: L.tileLayer.wms("http://139.162.55.216/geoserver/ows?", {
-    layers: 'geonode:boundary_kab',
+	kab: L.tileLayer.wms("http://localhost:8080/geoserver/ows", {
+    layers: 'postgis:boundary_kab',
 	format: 'image/png',
 	transparent: true
 	})

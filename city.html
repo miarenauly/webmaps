@@ -3,9 +3,10 @@
 	
 	<head>
 		<title>City in Indonesia</title>
-		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
 		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="leaflet-providers.js"></script>
 		<style>
 			html { height: 100% }
 			body { height: 100%; margin: 0; padding: 0;}
@@ -28,51 +29,13 @@
 			}).addTo(map);
   
 			//add geoJSON
-			$.getJSON('geojson/city.geojson', function(data) {
-                var layer_city = L.geoJson(data, {
-					style: function (feature) {
-						return {
-							color: '#a19d9e'
-							fill: true,
-							opacity: 1,
-							clickable: true
-						};
-					},
-					onEachFeature: function (feature, layer) {
-						layer.bindPopup(feature.properties.City_Town + '<br />'
-                                                        + feature.properties.City_Class
-																			+ feature.properties.Population);
-                  }
-                }).addTo(map);
-	
-			$.getJSON('geojson/indo.geojson', function(data) {
-                var layer_indo = L.geoJson(data, {
-					style: function (feature) {
-						return {
-							color: '#a19d9e'
-							fill: true,
-							opacity: 1,
-							clickable: true
-						};
-					},
-					onEachFeature: function (feature, layer) {
-						layer.bindPopup(feature.properties.City_Town + '<br />'
-                                                        + feature.properties.City_Class
-																			+ feature.properties.Population);
-                  }
-                }).addTo(map);
-				
-			//add layer control
-			var baseMaps = {
-			"Grayscale": OSM_mapnik,
-			"Streets": OSM_bw
-			};
-			var layer = {
-			"city" : layer_city
-			"indo" : layer_indo
-			};
-			L.control.layers(basemaps, layer).addTo(map);
-  
+			function addDataToMap(data, map) {
+				var dataLayer = L.geoJson(data);
+				dataLayer.addTo(map);
+			}
+
+			$.getJSON("geojson/city.geojson", function(data) { addDataToMap(data, map); });
+			
 			//add style
 
 		</script>
