@@ -5,8 +5,8 @@
 		<title>City in Indonesia</title>
 		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
 		<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-		<script src="leaflet-providers.js"></script>
+		<script src="geojson/kota.geojson" type="text/javascript"></script>
+		<script src="geojson/indo.geojson" type="text/javascript"></script>
 		<style>
 			html { height: 100% }
 			body { height: 100%; margin: 0; padding: 0;}
@@ -16,9 +16,9 @@
 	
 	<body>
 		<div id="map"></div>
-		<script>
+		<script type="text/javascript">
 			// initialize the map
-			var map = L.map('map',{scrollWheelZoom:true}).setView([-6.2, 106.8], 12);
+			var map = L.map('map',{scrollWheelZoom:true}).setView([-1.84, 120.5], 5);
   
 			//basemap OSM
 			var OSM_mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -29,14 +29,34 @@
 			}).addTo(map);
   
 			//add geoJSON
-			function addDataToMap(data, map) {
-				var dataLayer = L.geoJson(data);
-				dataLayer.addTo(map);
-			}
+			var cityLayer = L.geoJson().addTo(map);
+			cityLayer.addData(kotaPoint);
+			var indoLayer = L.geoJson();
+			indoLayer.addData(indoPoly);
 
-			$.getJSON("geojson/city.geojson", function(data) { addDataToMap(data, map); });
+			//add Layer Control
+			var baseMaps = {
+			"Streets": OSM_mapnik,
+			"Black and White": OSM_bw
+			};
+			var myLayer = {
+			"Indonesia": indoLayer,
+			"City": cityLayer
+			};
+			L.control.layers(baseMaps,myLayer).addTo(map);
 			
-			//add style
+			//add popup
+			var popupLayer = L.geoJson(kotaPoint, {
+				onEachFeature: yourOnEachFeatureFunction
+			}).addTo(map);
+
+			function yourOnEachFeatureFunction(feature, layer){
+				if (feature.properties.City_Town) {
+					layer.bindPopup('City: ' + feature.properties.City_Town + '<br>'
+                    + 'Population: ' + feature.properties.City_Popul + '<br>'
+					+ 'City Classification : ' + feature.properties.City_Class);
+				}
+			}		
 
 		</script>
 	</body>
