@@ -28,11 +28,76 @@
 				maxZoom: 18, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 			}).addTo(map);
   
+			//add indoLayer style
+			var myStyle = {
+				"color": "#ff7800",
+				"weight": 1,
+				"opacity": 0.9
+			};
+			
+			//add cityLayer style
+			var geojsonMarkerOptions = {
+				radius: 8,
+				fillColor: "#ff7800",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			};
+			var cityMarkerBig = {
+				radius: 15,
+				fillColor: "#ff7800",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			};
+			var cityMarkerMedium = {
+				radius: 12,
+				fillColor: "#ff7800",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			};
+			var cityMarkerMetro = {
+				radius: 9,
+				fillColor: "#ff7800",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			};
+			var cityMarkerSmall = {
+				radius: 6,
+				fillColor: "#ff7800",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			};
+
+			
+			//add kotaPoint popup
+			function yourOnEachFeatureFunction(feature, layer){
+				if (feature.properties.City_Town) {
+					layer.bindPopup('City: ' + feature.properties.City_Town + '<br>'
+                    + 'Population: ' + feature.properties.City_Popul + '<br>'
+					+ 'City Classification : ' + feature.properties.City_Class);
+				}
+			}
+					
+			
 			//add geoJSON
-			var cityLayer = L.geoJson().addTo(map);
-			cityLayer.addData(kotaPoint);
-			var indoLayer = L.geoJson();
-			indoLayer.addData(indoPoly);
+			var cityLayer = L.geoJson(kotaPoint,{
+				onEachFeature: yourOnEachFeatureFunction,
+				pointToLayer: function (feature, latlng) {
+					return L.circleMarker(latlng, geojsonMarkerOptions);
+					}
+			});
+			var indoLayer = L.geoJson(indoPoly, {
+				style: myStyle
+			});
 
 			//add Layer Control
 			var baseMaps = {
@@ -40,24 +105,11 @@
 			"Black and White": OSM_bw
 			};
 			var myLayer = {
-			"Indonesia": indoLayer,
+			"District": indoLayer,
 			"City": cityLayer
 			};
 			L.control.layers(baseMaps,myLayer).addTo(map);
 			
-			//add popup
-			var popupLayer = L.geoJson(kotaPoint, {
-				onEachFeature: yourOnEachFeatureFunction
-			}).addTo(map);
-
-			function yourOnEachFeatureFunction(feature, layer){
-				if (feature.properties.City_Town) {
-					layer.bindPopup('City: ' + feature.properties.City_Town + '<br>'
-                    + 'Population: ' + feature.properties.City_Popul + '<br>'
-					+ 'City Classification : ' + feature.properties.City_Class);
-				}
-			}		
-
 		</script>
 	</body>
 </html>
